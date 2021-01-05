@@ -168,7 +168,7 @@ const messageListener = (conn, doc, message) => {
   switch (messageType) {
     case messageSync:
       encoding.writeVarUint(encoder, messageSync)
-      syncProtocol.readSyncMessage(decoder, encoder, doc, null)
+      syncProtocol.readSyncMessage(decoder, encoder, doc, conn.user_id)
       if (encoding.length(encoder) > 1) {
         send(doc, conn, encoding.toUint8Array(encoder))
       }
