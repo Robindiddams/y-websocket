@@ -2,6 +2,8 @@
 # y-websocket :tophat:
 > WebSocket Provider for Yjs
 
+> This is a fork of https://github.com/yjs/y-websocket with changes for pinpt
+
 The Websocket Provider implements a classical client server model. Clients connect to a single endpoint over Websocket. The server distributes awareness information and document updates among clients.
 
 The Websocket Provider is a solid choice if you want a central source that handles authentication and authorization. Websockets also send header information and cookies, so you can use existing authentication mechanisms with this server.
