@@ -105,6 +105,9 @@ const setupWS = provider => {
         }])
       } else {
         provider.wsUnsuccessfulReconnects++
+        if (provider.wsUnsuccessfulReconnects === 4) {
+          provider.emit('cannotconnect', []);
+        }
       }
       // Start with no reconnect timeout and increase timeout by
       // log10(wsUnsuccessfulReconnects).
