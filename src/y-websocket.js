@@ -25,6 +25,7 @@ const messageSync = 0;
 const messageQueryAwareness = 3;
 const messageAwareness = 1;
 const messageAuth = 2;
+const messageSaveResponse = 10;
 
 const reconnectTimeoutBase = 1200;
 const maxReconnectTimeout = 2500;
@@ -72,6 +73,10 @@ const readMessage = (provider, buf, emitSynced) => {
 			break;
 		case messageAuth:
 			authProtocol.readAuthMessage(decoder, provider.doc, permissionDeniedHandler);
+			break;
+		case messageSaveResponse:
+			const commitSHA = decoding.readVarString(decoder);
+			provider.emit('saved', [commitSHA]);
 			break;
 		default:
 			console.error('Unable to compute message');
@@ -424,6 +429,14 @@ export class WebsocketProvider extends Observable {
 		if (!this.wsconnected && this.ws === null) {
 			setupWS(this);
 			this.connectBc();
+		}
+	}
+
+	forceSave() {
+		if (this.wsconnected && this.ws !== null) {
+			const encoder = encoding.createEncoder();
+			encoding.writeVarUint(encoder, messageSaveResponse);
+			this.ws.send(encoding.toUint8Array(encoder));
 		}
 	}
 }
